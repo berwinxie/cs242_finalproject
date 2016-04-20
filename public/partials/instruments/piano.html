@@ -1,0 +1,26 @@
+<div ng-controller='InstrumentController'>  
+  <script>
+    var synth = new Tone.SimpleSynth().toMaster();
+  </script>
+  <div class="row text-center">
+    What's your name?
+    <input ng-model="username" type="text">
+  </div>
+  <button class="button" ng-click="sendNote('C4', '0.25')">C</button>
+  <button class="button" ng-click="sendNote('D4', '0.25')">D</button>
+  <button class="button" ng-click="sendNote('E4', '0.25')">E</button>
+  <button class="button" ng-click="sendNote('F4', '0.25')">F</button>
+  <button class="button" ng-click="sendNote('G4', '0.25')">G</button>
+  <button class="button" ng-click="sendNote('A4', '0.25')">A</button>
+  <button class="button" ng-click="sendNote('B4', '0.25')">B</button>
+  <button class="button" ng-click="sendNote('C5', '0.25')">C</button>
+  <div id="Keyboard"></div>
+  
+  <div>
+    <canvas></canvas>
+    <!-- negative limitTo copysfrom the end of the array -->
+    <div ng-repeat="note in playedNotes">
+      {{note.user}}: {{note.playedNote}}
+    </div>
+  </div>
+</div>

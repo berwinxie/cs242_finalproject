@@ -1,0 +1,27 @@
+{
+  "name": "music",
+  "version": "1.0.0",
+  "authors": [
+    "berwin <bxie6@illinois.edu>"
+  ],
+  "dependencies": {
+    "angular": "^1.5.2",
+    "angular-animate": "^1.5.2",
+    "angular-aria": "^1.5.2",
+    "angular-datepicker": "^1.0.5",
+    "angular-material": "^1.0.6",
+    "angular-messages": "^1.5.2",
+    "express": "^4.11.1",
+    "grunt": "~0.4.2",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-compass": "~0.5.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-copy": "^0.1.0",
+    "grunt-express-server": "^0.4.19",
+    "matchdep": "~0.1.2",
+    "socket.io": "^1.4.5",
+    "tone": "^0.6.1"
+  }
+}
