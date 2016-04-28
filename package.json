@@ -11,6 +11,7 @@
     "angular-datepicker": "^1.0.5",
     "angular-material": "^1.0.6",
     "angular-messages": "^1.5.2",
+    "clipboard": "^1.5.10",
     "express": "^4.11.1",
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "^0.6.0",
@@ -21,6 +22,7 @@
     "grunt-copy": "^0.1.0",
     "grunt-express-server": "^0.4.19",
     "matchdep": "~0.1.2",
+    "ngclipboard": "^1.1.1",
     "socket.io": "^1.4.5",
     "tone": "^0.6.1"
   }

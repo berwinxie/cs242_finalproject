@@ -1,15 +1,15 @@
 var musicControllers = angular.module('musicControllers', []);
 
-musicControllers.controller('LoginController', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
-
-}]);
-
-
-musicControllers.controller('InstrumentController', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
+musicControllers.controller('InstrumentController', ['$scope', '$routeParams', '$http','$timeout', function($scope, $routeParams, $http, $timeout) {
   $scope.whichInstrument = $routeParams.whichInstrument;
-  console.log('cur instrument:' + $scope.whichInstrument);
+  // console.log('cur instrument:' + $scope.whichInstrument);
   $scope.instrument = {};
   $scope.song = {};
+  $scope.voiceList = responsiveVoice.getVoices();
+  // console.log($scope.voiceList);
+  // allows us to keep how much time as elapsed in ms
+  $scope.startTime = new Date().getTime();
+  // console.log($scope.startTime);
 
   $scope.visible = {
     keyboard: false,
@@ -138,17 +138,18 @@ musicControllers.controller('InstrumentController', ['$scope', '$routeParams', '
   // receive played notes from server
   $scope.socket.on('getNote', function (data) {
     console.log('got a note');
-    console.log(data);
+    // time stamp is number of ms from start
+    var curtime = new Date().getTime();
+    var timestamp = curtime - $scope.startTime;
+    data.timestamp = timestamp;
     $scope.addNotes(data);
   });
 
   // send notes through web server
   $scope.sendNote = function(note, duration, drumType) {
-    console.log('sending note');
-    console.log( 'user: ' + $scope.username);
     var username = $scope.username;
-    console.log('username: ' + username);
     if (username === '' || username === undefined) {
+      // setting default name
       username = 'anon';
     }
     $scope.socket.emit('playNote', { note: note, duration: duration, message: 'Sent a note!', instrument: $scope.whichInstrument, username : username, drumType:drumType});
@@ -163,13 +164,11 @@ musicControllers.controller('InstrumentController', ['$scope', '$routeParams', '
   $scope.addNotes = function(note) {
     $scope.playNote(note.playedNote, note.duration, note.drumType, note.instrument);
 
-
     // if drum, change note.playedNote to drumtype
-    if(note.drumType !== '') {
+    if(note.instrument == 'drums') {
       note.playedNote = note.drumType;
     }
     $scope.playedNotes.push(note);
-
 
     // this will update the scope
     $scope.$digest();
@@ -179,11 +178,11 @@ musicControllers.controller('InstrumentController', ['$scope', '$routeParams', '
     play note for just 0.5 second
   */
   $scope.playNote = function(note, duration, drumType, instrument) {
-    console.log(note);
-    console.log(duration);
     if (instrument === 'piano') {
       $scope.synth.triggerAttackRelease(note, duration);
     }
+    // drums is special case
+    // need to check drum type as well
     else if (instrument === 'drums') {
       if (drumType == 'snare') {
         $scope.snare.triggerAttackRelease(note, 0.5);
@@ -199,7 +198,62 @@ musicControllers.controller('InstrumentController', ['$scope', '$routeParams', '
       }
     }
     else if (instrument === 'voice') {
-      responsiveVoice.speak(note);
+      // need to refactor
+      var voice = duration;
+      var params = drumType;
+      if (duration !== '' && duration !== undefined){
+        responsiveVoice.speak(note, voice, params);
+      }
+      else {
+        // no selected voice, so choose default
+        responsiveVoice.speak(note, "US English Female", params);
+      }
     }
+  }
+
+  /*
+  Take in pasted data that we retrieve from copying a song in order to replay the song
+  */
+  $scope.playSong = function(inputtedData) {
+    $scope.playedNotes = [];
+    // convert string back into an object
+    var notes = JSON.parse(inputtedData);
+    for (var i = 0; i < notes.length; i++) {
+      var note = notes[i];
+      console.log(note);
+
+      // poor design : need to refactor since I am overwriting playedNote $scope.addNotes()
+      // this converts all the playedNote back to orig
+      if(note.playedNote == 'snare' || note.playedNote == 'hats') {
+        note.playedNote = 0;
+      }
+      if(note.playedNote == 'kick' || note.playedNote == 'bass') {
+        note.playedNote = "C4";
+      } 
+    }
+
+    // create all the timeouts so it gets played in the right order
+    // https://coderwall.com/p/udpmtq/angularjs-use-timeout-not-settimeout
+    $scope.timeInMs = 0;
+    var curIndex = 0;
+    var play = function() {
+      if (notes[curIndex].timestamp < $scope.timeInMs) {
+        note = notes[curIndex];
+        console.log('note at ' + notes[curIndex].timestamp);
+        // play the note that was just passed in the timestamp
+        $scope.addNotes(note);
+        // $scope.playNote(note.playedNote, note.duration, note.drumType, note.instrument);
+        curIndex += 1;
+        // reached the end of the song
+        if (curIndex > notes.length) {
+          return;
+        }
+      }
+      // we're only updating every 10 ms
+      $scope.timeInMs+= 10;
+      console.log($scope.timeInMs)
+      $timeout(play, 10);
+    }
+    $timeout(play, 10);
   }
 }]);

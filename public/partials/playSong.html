@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="columns small-6 small-centered">
+        Paste in your copied data: <input class="text" ng-model="inputtedSong">
+    </div>
+</div>
+
+<div class="row">
+    <div class="columns small-6 small-centered">
+        <button class="button" ng-click="playSong(inputtedSong)">Play Song</button>
+    </div>
+</div>
+
+<div>
+  <!-- negative limitTo copysfrom the end of the array -->
+  <div class="row">
+    <div class="columns small-4 small-centered">
+      <h3>Log History</h3>
+      <div ng-repeat="note in playedNotes.slice().reverse()">
+        {{note.username}}: {{note.playedNote}}
+      </div>
+    </div>
+  </div>
+</div>

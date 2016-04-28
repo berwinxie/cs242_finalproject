@@ -1,4 +1,4 @@
-<div ng-controller='InstrumentController'>  
+<div>  
   <script>
   var synth = new Tone.SimpleSynth().toMaster();
   </script>
@@ -7,36 +7,83 @@
     <input ng-model="username" type="text">
   </div>
 
-  <div ng-show="visible.keyboard">
-    <button class="button" ng-click="sendNote('C4', '0.25', '')">C</button>
-    <button class="button" ng-click="sendNote('D4', '0.25', '')">D</button>
-    <button class="button" ng-click="sendNote('E4', '0.25', '')">E</button>
-    <button class="button" ng-click="sendNote('F4', '0.25', '')">F</button>
-    <button class="button" ng-click="sendNote('G4', '0.25', '')">G</button>
-    <button class="button" ng-click="sendNote('A4', '0.25', '')">A</button>
-    <button class="button" ng-click="sendNote('B4', '0.25', '')">B</button>
-    <button class="button" ng-click="sendNote('C5', '0.25', '')">C</button>
-    <div id="Keyboard"></div>
+  <div class="row" ng-show="visible.keyboard">
+    <div class="columns small-12 small-centered">
+      <button class="button whitekey" ng-click="sendNote('C4', '0.25', '')">C</button>
+      <button class="button blackkey" ng-click="sendNote('C#4', '0.25', '')">C#</button>
+      <button class="button whitekey-left" ng-click="sendNote('D4', '0.25', '')">D</button>
+      <button class="button blackkey" ng-click="sendNote('D#4', '0.25', '')">D#</button>
+      <button class="button whitekey-left" ng-click="sendNote('E4', '0.25', '')">E</button>
+      <button class="button whitekey-left" ng-click="sendNote('F4', '0.25', '')">F</button>
+      <button class="button blackkey" ng-click="sendNote('F#4', '0.25', '')">F#</button>
+      <button class="button whitekey-left" ng-click="sendNote('G4', '0.25', '')">G</button>
+      <button class="button blackkey" ng-click="sendNote('G#4', '0.25', '')">G#</button>
+      <button class="button whitekey-left" ng-click="sendNote('A4', '0.25', '')">A</button>
+      <button class="button blackkey" ng-click="sendNote('A#4', '0.25', '')">A#</button>
+      <button class="button whitekey-left" ng-click="sendNote('B4', '0.25', '')">B</button>
+      <button class="button whitekey" ng-click="sendNote('C5', '0.25', '')">C</button>
+      <button class="button blackkey" ng-click="sendNote('C#5', '0.25', '')">C#</button>
+      <button class="button whitekey-left" ng-click="sendNote('D5', '0.25', '')">D</button>
+      <button class="button blackkey" ng-click="sendNote('D#5', '0.25', '')">D#</button>
+      <button class="button whitekey-left" ng-click="sendNote('E5', '0.25', '')">E</button>
+      <button class="button whitekey-left" ng-click="sendNote('F5', '0.25', '')">F</button>
+      <button class="button blackkey" ng-click="sendNote('F#5', '0.25', '')">F#</button>
+      <button class="button whitekey-left" ng-click="sendNote('G5', '0.25', '')">G</button>
+      <button class="button blackkey" ng-click="sendNote('G#5', '0.25', '')">G#</button>
+      <button class="button whitekey-left" ng-click="sendNote('A5', '0.25', '')">A</button>
+      <button class="button blackkey" ng-click="sendNote('A#5', '0.25', '')">A#</button>
+      <button class="button whitekey-left" ng-click="sendNote('B5', '0.25', '')">B</button>
+    </div>
   </div>
 
-  <div ng-show="visible.drums">
-    <button class="button" ng-click="sendNote(0, '0.25', 'snare')">Snare</button>
-    <button class="button" ng-click="sendNote(0, '0.25', 'hats')">Hats</button>
-    <button class="button" ng-click="sendNote('C4', '0.25', 'kick')">Kick</button>
-    <button class="button" ng-click="sendNote('C4', '0.25', 'bass')">Bass</button>
-    <div id="Keyboard"></div>
+  <div class="row" ng-show="visible.voice">
+    <div class="columns small-3">
+      <select ng-model="voiceSelect">
+            <option ng-repeat="v in voiceList" value="{{v.name}}">{{v.name}}</option>
+      </select>
+      Pitch:
+      <input ng-model="params.pitch" type="range" min="0" max="2" step=".1">
+      Speed:
+      <input ng-model="params.rate" type="range" min="0" max="1.5" step=".1">
+    </div>
+    <div class="columns small-9">
+      Lyrics: <input ng-model="texttovoice" type="text">
+      <button class="button success" ng-click="sendNote(texttovoice, voiceSelect, params)">Sing!</button>
+    </div>
+
   </div>
 
-  <div ng-show="visible.voice">
-    <input ng-model="texttovoice" type="text">
-    <button class="button success" ng-click="sendNote(texttovoice, '', '')">Sing!</button>
+  <div class="row" ng-show="visible.drums">
+    <div class="columns small-3">
+      <div class="round-button-circle" ng-click="sendNote(0, '0.25', 'snare')">Snare</div>
+    </div>
+    <div class="columns small-3">
+      <div class="round-button-circle" ng-click="sendNote(0, '0.25', 'hats')">Hats</div>
+    </div>
+    <div class="columns small-3">
+      <div class="round-button-circle" ng-click="sendNote('C4', '0.25', 'kick')">Kick</div>
+    </div>
+    <div class="columns small-3">
+      <div class="round-button-circle" ng-click="sendNote('C4', '0.25', 'bass')">Bass</div>
+    </div>
   </div>
+
+  
 
   <div>
-    <canvas></canvas>
     <!-- negative limitTo copysfrom the end of the array -->
-    <div ng-repeat="note in playedNotes.slice().reverse()">
-      {{note.username}}: {{note.playedNote}}
+    <div class="row">
+      <div class="columns small-4 small-centered">
+        <h3>Log History</h3>
+        <!-- Trigger -->
+        <button class="button" ngclipboard data-clipboard-text="{{playedNotes}}">
+            Copy song
+        </button>
+
+        <div ng-repeat="note in playedNotes.slice().reverse()">
+          {{note.username}}: {{note.playedNote}}
+        </div>
+      </div>
     </div>
   </div>
 </div>

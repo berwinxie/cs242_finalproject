@@ -4483,6 +4483,61 @@ code {
   pointer-events: none;
   opacity: 0; }
 
+/* line 392, ../../source_sass/_base.scss */
+.whitekey {
+  width: 50px;
+  height: 200px;
+  background-color: #e2eaf3;
+  padding-top: 180px; }
+  /* line 393, ../../source_sass/_base.scss */
+  .whitekey-left {
+    left: -50px;
+    width: 50px;
+    height: 200px;
+    background-color: #e2eaf3;
+    padding-top: 180px; }
+
+/* line 408, ../../source_sass/_base.scss */
+.blackkey {
+  transform: translateX(-25px);
+  z-index: 50;
+  position: absolute;
+  width: 50px;
+  height: 100px;
+  background-color: #4679BD;
+  padding-top: 80px; }
+
+/* line 428, ../../source_sass/_base.scss */
+.round-button-circle {
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  border: 10px solid #cfdcec;
+  overflow: hidden;
+  background: #4679BD;
+  box-shadow: 0 0 3px gray; }
+
+/* line 439, ../../source_sass/_base.scss */
+.round-button-circle:hover {
+  background: #30588e; }
+
+/* line 442, ../../source_sass/_base.scss */
+.round-button a {
+  display: block;
+  float: left;
+  width: 100%;
+  padding-top: 50%;
+  padding-bottom: 50%;
+  line-height: 1em;
+  margin-top: -0.5em;
+  text-align: center;
+  color: #e2eaf3;
+  font-family: Verdana;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-decoration: none; }
+
 /*
   NOTE: Do not touch this file. Write the bulk of your custom styles
   in _base.scss
