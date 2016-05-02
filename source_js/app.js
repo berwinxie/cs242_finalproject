@@ -16,7 +16,7 @@ app.config(['$routeProvider', function($routeProvider) {
   }).
   when('/playSong', {
     templateUrl: 'partials/playSong.html',
-    controller: 'InstrumentController'
+    controller: 'ReplayController'
   }).
   otherwise({
     redirectTo: '/pickInstrument'
